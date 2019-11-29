@@ -5,6 +5,11 @@ import com.codegym.models.Supplier;
 import com.codegym.services.material.MaterialService;
 import com.codegym.services.supplier.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +26,8 @@ public class MaterialController {
     @Autowired
     private SupplierService supplierService;
     @GetMapping("/materials")
-    public String materialList(Model model) {
-        List<Material> materials = materialService.findAll();
+    public String materialList(Model model,@PageableDefault(size = 5,sort = "price") Pageable pageable) {
+        Page<Material> materials = materialService.findAll(pageable);
         model.addAttribute("materials", materials);
         return "materials/list";
     }
@@ -62,7 +67,14 @@ public class MaterialController {
         return "materials/delete";
     }
     @ModelAttribute("suppliers")
-    public List<Supplier> suppliers(){
-        return supplierService.findAll();
+    public Page<Supplier> suppliers(Pageable pageable){
+        return supplierService.findAll(pageable);
+    }
+    @GetMapping("/list-materrials/{id}")
+    public String listMaterials(@PathVariable Long id, Model model){
+        Supplier supplier = supplierService.findById(id);
+        List<Material> materials = materialService.findAllBySupplier(supplier);
+        model.addAttribute("materials", materials);
+        return "suppliers/listmaterials-suppliers";
     }
 }

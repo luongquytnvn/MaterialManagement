@@ -1,10 +1,14 @@
 package com.codegym.controllers;
 
+import com.codegym.models.Material;
 import com.codegym.models.Supplier;
 import com.codegym.models.Supplier;
 import com.codegym.services.supplier.SupplierService;
 import com.codegym.services.supplier.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +21,8 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
     @GetMapping("/suppliers")
-    public String supplierList(Model model){
-        List<Supplier> suppliers = supplierService.findAll();
+    public String supplierList(Model model,@PageableDefault(size = 5) Pageable pageable){
+        Page<Supplier> suppliers = supplierService.findAll(pageable);
         model.addAttribute("suppliers",suppliers);
         return "suppliers/list";
     }
@@ -61,4 +65,5 @@ public class SupplierController {
         supplierService.remove(supplier.getId());
         return "suppliers/delete";
     }
+
 }
