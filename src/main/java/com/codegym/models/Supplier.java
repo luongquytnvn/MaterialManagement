@@ -13,6 +13,7 @@ public class Supplier {
     private String description;
     private String address;
     @OneToMany(targetEntity = Material.class)
+
     private List<Material> materials;
 
     public Supplier() {
