@@ -53,14 +53,14 @@
     <a href="/create-material">Create new material</a>
 </p>
 <h1>Materials</h1>
-<form >
+<form action="/search-material">
     Search by name:
     <input name="search" type="text"/>
     <input type="submit" value="Search"/>
 </form>
 <br/>
 <div class="dropdown">
-    <button class="dropbtn">Category filter</button>
+    <button class="dropbtn">Supplier filter</button>
     <div class="dropdown-content">
         <th:block th:each="supplier : ${suppliers}">
             <a th:href="@{/list-materials/__${supplier.id}__}"><div th:text="${supplier.name}"></div></a>
